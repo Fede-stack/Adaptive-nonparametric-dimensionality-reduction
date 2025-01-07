@@ -1,4 +1,4 @@
-# Adaptive-non-linear-dimensionality-reduction
+# Adaptive non linear dimensionality reduction
 
 
 Install all necessary libraries
