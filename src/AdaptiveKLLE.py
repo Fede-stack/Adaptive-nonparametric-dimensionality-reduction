@@ -93,6 +93,17 @@ class K_starLLE:
             return ids, kstars[(self.n_iter - 1), :]#, ids_err, log_likelihoods, ks_stats, p_values
 
     def find_Kstar_neighs(self, kstars):
+    """
+    Finds the k* nearest neighbors for each point in the dataset, where k* varies per point.
+    
+    Args:
+        kstars (numpy.ndarray): Array containing the number of neighbors (k*) to find for each point.
+                               Length should match the number of points in self.X.
+    
+    Returns:
+        list: List of lists where each inner list contains the indices of the k* nearest 
+              neighbors for the corresponding point, excluding the point itself.
+    """
         nn = NearestNeighbors(n_jobs=-1)
         nn.fit(self.X)
 
@@ -109,6 +120,22 @@ class K_starLLE:
         return n_components
 
     def K_star_local_linear_embedding(self, indices, n_components):
+     """
+    Performs the core Local Linear Embedding algorithm with adaptive k* neighborhoods.
+    
+    This function has three main steps:
+    1. Compute reconstruction weights for each point using its neighbors
+    2. Build the sparse matrix M = (I-W)ᵀ(I-W) encoding the global geometry
+    3. Find the bottom eigenvectors of M to get the embedding
+    
+    Args:
+        indices (list): List of lists containing neighbor indices for each point
+        n_components (int): Number of dimensions in the output embedding
+    
+    Returns:
+        Y (numpy.ndarray): The final embedding coordinates of shape (n_samples, n_components)
+        W (numpy.ndarray): The weight matrix encoding local linear relationships
+    """
         W = np.zeros((self.X.shape[0], self.X.shape[0]))
         for i in range(self.X.shape[0]):
             n_neighbors = len(indices[i])
@@ -130,6 +157,28 @@ class K_starLLE:
         return Y, W
     
     def calculate_embedding(self, initial_id=None, Dthr=23.92812698, r='opt'):
+    """
+    Calculates the complete k* LLE embedding by combining all major steps of the algorithm.
+
+    This is the main wrapper function that:
+    1. Estimates intrinsic dimensionality and optimal k* values
+    2. Finds nearest neighbors using these k* values
+    3. Performs LLE with the adaptive neighborhoods
+    
+    Args:
+        initial_id (float, optional): Initial estimate of intrinsic dimensionality.
+            If None, uses 2-NN estimator.
+        Dthr (float, optional): Threshold value for the K* test.
+            Default is 23.92812698.
+        r (str or float, optional): Parameter for binomial estimator.
+            If 'opt', uses an adaptive value based on dimensionality.
+            If float, should be between 0 and 1.
+    
+    Returns:
+        Y (numpy.ndarray): The final embedding coordinates
+        W (numpy.ndarray): Weight matrix encoding local linear relationships
+        kstars (numpy.ndarray): Array of K* values used for each point
+    """
         ids, kstars = self.return_ids_kstar_binomial(initial_id=initial_id, Dthr=Dthr, r=r)
         indices = self.find_Kstar_neighs(kstars)
         n_components = self.find_components(ids)
@@ -137,10 +186,30 @@ class K_starLLE:
         return Y, W, kstars
 
     def calculate_n_dimembedding(self, initial_id=None, Dthr=6.67, r='opt', n_comps = 2):
+    """
+    Similar to calculate_embedding function, but setting the n_components a priori.
+    """
         ids, kstars = self.return_ids_kstar_binomial(initial_id=initial_id, Dthr=Dthr, r=r)
         indices = self.find_Kstar_neighs(kstars)
         Y, W = self.K_star_local_linear_embedding(indices, n_comps)
         return Y, W, kstars
     
     def calculate_reconstruction_error(self, Y, W):
+    """
+    Calculates the reconstruction error of the embedding by comparing
+    each point to its reconstruction from weighted neighbors.
+    
+    The error measures how well the local linear relationships in the
+    original space are preserved in the embedding space. A lower error
+    indicates better preservation of local geometry.
+    
+    Args:
+        Y (numpy.ndarray): The embedding coordinates of shape (n_samples, n_components)
+        W (numpy.ndarray): Weight matrix from LLE of shape (n_samples, n_samples)
+            where W[i,j] is the weight of point j in reconstructing point i
+    
+    Returns:
+        float: The total reconstruction error computed as the squared Frobenius norm
+              of the difference between points and their reconstructions
+    """
         return np.sum((Y - np.dot(W, Y))**2)
