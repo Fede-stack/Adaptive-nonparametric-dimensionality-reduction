@@ -6,7 +6,9 @@ Code Repository for the "*Adaptive non linear dimensionality reduction*" manuscr
 
 
 In the `examples/` directory you can find examples of experiments presented in the manuscript.
+
 In the `src/` directory, the implementation of Adaptive LLE and Adaptive Spectral Clustering.
+
 In the `dataset` directory, the .csv files of the datasets used for the experiments.
 
 Install all necessary libraries
