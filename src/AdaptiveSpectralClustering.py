@@ -157,7 +157,7 @@ class AdaptiveSpectralClustering:
         km.fit(embs)
         return km.labels_
 
-    def fit(self, n_clusters, use_distances=False, clustering_method='d'):
+    def fit(self, n_clusters, use_distances=False, clustering_method=''):
         """
         Complete pipeline for clustering.
         
