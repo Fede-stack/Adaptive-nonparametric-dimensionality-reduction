@@ -5,6 +5,23 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+import os
+import numpy as np
+import pytest
+from dadapy import Data
+from dadapy._utils import utils as ut
+from scipy.optimize import minimize
+from scipy.linalg import eigh, qr, solve, svd
+from scipy.sparse import csr_matrix, eye
+from scipy.sparse.linalg import eigsh
+from scipy.stats import ks_2samp
+import sklearn
+from sklearn.neighbors import NearestNeighbors
+from sklearn.cluster import KMeans
+from scipy.spatial import distance
+from sklearn.manifold import SpectralEmbedding
+
+
 class AdaptiveSpectralClustering:
     def __init__(self, X, n_iter=10):
         """
