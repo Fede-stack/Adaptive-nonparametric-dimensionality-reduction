@@ -150,7 +150,8 @@ class AdaptiveSpectralClustering:
         Args:
             n_clusters: Number of clusters to create
         """
-        se = SpectralEmbedding(n_components=3, random_state=0, affinity='precomputed')
+        n_components = self.find_components()
+        se = SpectralEmbedding(n_components=n_components, random_state=0, affinity='precomputed')
         embs = se.fit_transform(self.similarity_matrix)
         
         km = KMeans(n_clusters=n_clusters, random_state=0, n_init=10)
