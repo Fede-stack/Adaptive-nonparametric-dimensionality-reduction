@@ -1,4 +1,4 @@
-# Adaptive non linear dimensionality reduction
+# Adaptive-nonparametric-dimensionality-reduction
 
 Code Repository for the "*Adaptive non linear dimensionality reduction*" manuscript. 
 
