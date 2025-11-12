@@ -121,27 +121,6 @@ class AdaptiveSpectralClustering:
         self.similarity_matrix = 0.5 * (similarity_matrix + similarity_matrix.T)
         return self.similarity_matrix
 
-    def return_clustering(self, n_clusters, use_n_components=True):
-        """
-        Perform spectral clustering using Laplacian eigenvectors.
-        
-        Args:
-            n_clusters: Number of clusters to create
-            use_n_components: If True, use estimated intrinsic dimension for embedding
-        """
-        if use_n_components:
-            k = self.n_components
-        else:
-            k = n_clusters
-            
-        degree_matrix = np.diag(self.similarity_matrix.sum(axis=1))
-        laplacian_matrix = degree_matrix - self.similarity_matrix
-        eigenvalues, eigenvectors = eigh(laplacian_matrix)
-        k_eigenvectors = eigenvectors[:, :k]
-        
-        kmeans = KMeans(n_clusters=n_clusters, random_state=0, n_init=10)
-        kmeans.fit(k_eigenvectors)
-        return kmeans.labels_
 
     def return_clusters(self, n_clusters):
         """
@@ -158,7 +137,7 @@ class AdaptiveSpectralClustering:
         km.fit(embs)
         return km.labels_
 
-    def fit(self, n_clusters, use_distances=False, clustering_method=''):
+    def fit(self, n_clusters, use_distances=False):
         """
         Complete pipeline for clustering.
         
@@ -180,7 +159,5 @@ class AdaptiveSpectralClustering:
         #Determine number of components
         self.find_components()
         
-        if clustering_method == 'spectral':
-            return self.return_clustering(n_clusters=n_clusters)
-        else:
-            return self.return_clusters(n_clusters=n_clusters)
+        
+        return self.return_clusters(n_clusters=n_clusters)
