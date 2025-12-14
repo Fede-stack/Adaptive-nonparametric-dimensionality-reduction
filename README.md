@@ -27,3 +27,12 @@ pip install -r requirements.txt
   year={2024}
 }
 ```
+
+```bibtex
+@article{di2025general,
+  title={A general framework for adaptive nonparametric dimensionality reduction},
+  author={Di Noia, Antonio and Ravenda, Federico and Mira, Antonietta},
+  journal={arXiv preprint arXiv:2511.09486},
+  year={2025}
+}
+```
