@@ -1,6 +1,6 @@
 # Adaptive-nonparametric-dimensionality-reduction
 
-Code Repository for the "*Adaptive non linear dimensionality reduction*" manuscript. 
+Code Repository for the "*A general framework for adaptive nonparametric dimensionality reduction*" manuscript. 
 
 <img src="https://github.com/Fede-stack/Adaptive-non-linear-dimensionality-reduction/blob/main/images/LLE_star.png" alt="" width="900">
 
