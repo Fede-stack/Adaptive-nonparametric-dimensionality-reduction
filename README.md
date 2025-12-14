@@ -11,12 +11,6 @@ In the `src/` directory, the implementation of Adaptive LLE and Adaptive Spectra
 
 In the `dataset` directory, the .csv files of the datasets used for the experiments.
 
-Install all necessary libraries
-
-```python 
-pip install -r requirements.txt
-```
-
 # Reference 
 
 ```bibtex
