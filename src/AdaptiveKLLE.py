@@ -184,15 +184,6 @@ class K_starLLE:
         n_components = self.find_components(ids)
         Y, W = self.K_star_local_linear_embedding(indices, n_components)
         return Y, W, kstars
-
-    def calculate_n_dimembedding(self, initial_id=None, Dthr=6.67, r='opt', n_comps = 2):
-    """
-    Similar to calculate_embedding function, but setting the n_components a priori.
-    """
-        ids, kstars = self.return_ids_kstar_binomial(initial_id=initial_id, Dthr=Dthr, r=r)
-        indices = self.find_Kstar_neighs(kstars)
-        Y, W = self.K_star_local_linear_embedding(indices, n_comps)
-        return Y, W, kstars
     
     def calculate_reconstruction_error(self, Y, W):
     """
